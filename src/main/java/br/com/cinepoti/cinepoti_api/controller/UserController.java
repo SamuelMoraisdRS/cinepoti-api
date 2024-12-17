@@ -1,18 +1,20 @@
 package br.com.cinepoti.cinepoti_api.controller;
 
-import br.com.cinepoti.cinepoti_api.model.user.UserRequestDTO;
-import br.com.cinepoti.cinepoti_api.model.user.UserResponseDTO;
+import br.com.cinepoti.cinepoti_api.dto.request.UserRequestDTO;
+import br.com.cinepoti.cinepoti_api.dto.response.UserResponseDTO;
 import br.com.cinepoti.cinepoti_api.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("/users")  // Define o caminho base para os endpoints relacionados ao usuário
+@RequestMapping("/usuarios")  // Define o caminho base para os endpoints relacionados ao usuário
+@CrossOrigin
+
 public class UserController {
 
 
@@ -23,9 +25,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Endpoint para criar um novo usuário
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO userRequestDTO) {
+    // Endpoint para registrar um novo usuário
+    @PostMapping("/cadastrar")
+    public ResponseEntity<UserResponseDTO> createUser(@Valid  @RequestBody UserRequestDTO userRequestDTO) {
         // Chama o serviço para salvar o usuário
         UserResponseDTO userResponseDTO = userService.saveUser(userRequestDTO);
 
@@ -42,7 +44,7 @@ public class UserController {
 
     // Endpoint para buscar um usuário por ID
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable("id") UUID id) {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable("id") Long id) {
         UserResponseDTO userResponseDTO = userService.getUserById(id);
         if (userResponseDTO != null) {
             return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
@@ -53,7 +55,7 @@ public class UserController {
     // Endpoint para atualizar um usuário
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
-            @PathVariable("id") UUID id,
+            @PathVariable("id") Long id,
             @RequestBody UserRequestDTO userRequestDTO) {
 
         UserResponseDTO userResponseDTO = userService.updateUser(id, userRequestDTO);
@@ -61,6 +63,14 @@ public class UserController {
             return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok().build();
+
+
     }
 
 }
