@@ -29,7 +29,7 @@ public class UserController {
     @PostMapping("/cadastrar")
     public ResponseEntity<UserResponseDTO> createUser(@Valid  @RequestBody UserRequestDTO userRequestDTO) {
         // Chama o serviço para salvar o usuário
-        UserResponseDTO userResponseDTO = userService.saveUser(userRequestDTO);
+        UserResponseDTO userResponseDTO = userService.createUser(userRequestDTO);
 
         // Retorna a resposta com o status HTTP 201 (Created)
         return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);

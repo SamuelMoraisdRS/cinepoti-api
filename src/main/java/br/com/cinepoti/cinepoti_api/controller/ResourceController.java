@@ -34,7 +34,7 @@ public class ResourceController {
 
     @PostMapping("/cadastrar")
     public ResponseEntity<ResourceResponseDTO> createResource(@Valid  @RequestBody ResourceRequestDTO resourceRequestDTO){
-        ResourceResponseDTO resource = resourceService.addResource(resourceRequestDTO);
+        ResourceResponseDTO resource = resourceService.createResource(resourceRequestDTO);
         return new ResponseEntity<>(resource, HttpStatus.CREATED);
     }
 

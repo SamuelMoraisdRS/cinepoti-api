@@ -25,7 +25,7 @@ public class PermissionProfileResourceController {
     @PostMapping("/cadastrar")
     public ResponseEntity<PermissionProfileResourceResponseDTO> create(
             @RequestBody PermissionProfileResourceRequestDTO requestDTO) {
-        PermissionProfileResourceResponseDTO response = service.savePPR(requestDTO);
+        PermissionProfileResourceResponseDTO response = service.createPPR(requestDTO);
         return ResponseEntity.ok(response);
     }
 

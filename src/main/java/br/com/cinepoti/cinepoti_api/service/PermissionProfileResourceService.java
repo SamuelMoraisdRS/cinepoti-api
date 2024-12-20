@@ -22,7 +22,7 @@ public class PermissionProfileResourceService {
         this.repository = repository;
     }
 
-    public PermissionProfileResourceResponseDTO savePPR(PermissionProfileResourceRequestDTO dto) {
+    public PermissionProfileResourceResponseDTO createPPR(PermissionProfileResourceRequestDTO dto) {
         PermissionProfileResource entity = PermissionProfileResourceMapper.toEntity(dto);
 
         PermissionProfileResource savedEntity = repository.save(entity);

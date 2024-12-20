@@ -23,46 +23,41 @@ public class ProfileService {
         this.profileRepository = profileRepository;
     }
 
-    // Cria um novo Profile
     public ProfileResponseDTO createProfile(ProfileRequestDTO profileRequestDTO) {
-        Profile profile = ProfileMapper.toEntity(profileRequestDTO); // Usando o mapper para converter o DTO para a entidade
+        Profile profile = ProfileMapper.toEntity(profileRequestDTO);
         profile = profileRepository.save(profile);
-        return ProfileMapper.toResponseDTO(profile); // Usando o mapper para converter a entidade para o DTO de resposta
+        return ProfileMapper.toResponseDTO(profile);
     }
 
-    // Recupera todos os Profiles
     public List<ProfileResponseDTO> getAllProfiles() {
         List<Profile> profiles = profileRepository.findAll();
         return profiles.stream()
-                .map(ProfileMapper::toResponseDTO) // Usando o mapper para converter a entidade para o DTO
+                .map(ProfileMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    // Recupera um Profile por ID
     public ProfileResponseDTO getProfileById(Long id) {
         Optional<Profile> profileOpt = profileRepository.findById(id);
         if (profileOpt.isPresent()) {
             Profile profile = profileOpt.get();
-            return ProfileMapper.toResponseDTO(profile); // Usando o mapper para converter a entidade para o DTO
+            return ProfileMapper.toResponseDTO(profile);
         } else {
             throw new RuntimeException("Profile not found with id: " + id);
         }
     }
 
-    // Atualiza um Profile existente
     public ProfileResponseDTO updateProfile(Long id, ProfileRequestDTO profileRequestDTO) {
         Optional<Profile> profileOpt = profileRepository.findById(id);
         if (profileOpt.isPresent()) {
             Profile profile = profileOpt.get();
-            profile.setDescription(profileRequestDTO.description()); // Atualiza os campos
+            profile.setDescription(profileRequestDTO.description());
             profile = profileRepository.save(profile);
-            return ProfileMapper.toResponseDTO(profile); // Usando o mapper para converter a entidade para o DTO
+            return ProfileMapper.toResponseDTO(profile);
         } else {
             throw new RuntimeException("Profile not found with id: " + id);
         }
     }
 
-    // Deleta um Profile por ID
     public void deleteProfile(Long id) {
         Optional<Profile> profileOpt = profileRepository.findById(id);
         if (profileOpt.isPresent()) {

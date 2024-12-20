@@ -23,7 +23,7 @@ public class ResourceService {
     }
 
     // Adiciona um novo Resource
-    public ResourceResponseDTO addResource(ResourceRequestDTO resourceRequestDTO) {
+    public ResourceResponseDTO createResource(ResourceRequestDTO resourceRequestDTO) {
         Resource resource = ResourceMapper.toEntity(resourceRequestDTO); // Usando o mapper para converter DTO para entidade
         Resource savedResource = resourceRepository.save(resource);
         return ResourceMapper.toResponseDTO(savedResource); // Usando o mapper para converter a entidade para DTO

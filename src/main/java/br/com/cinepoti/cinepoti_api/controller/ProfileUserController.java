@@ -23,7 +23,7 @@ public class ProfileUserController {
 
     @PostMapping("/cadastrar")
     public ResponseEntity<ProfileUserResponseDTO> createProfile(@Valid @RequestBody ProfileUserRequestDTO profileUserRequestDTO) {
-        ProfileUserResponseDTO profileUserResponseDTO = profileUserService.addProfileUser(profileUserRequestDTO);
+        ProfileUserResponseDTO profileUserResponseDTO = profileUserService.createProfileUser(profileUserRequestDTO);
         return ResponseEntity.ok(profileUserResponseDTO);
     }
 

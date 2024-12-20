@@ -6,6 +6,7 @@ import br.com.cinepoti.cinepoti_api.dto.request.UserRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.UserResponseDTO;
 import br.com.cinepoti.cinepoti_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,15 +15,17 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository ) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
 
     }
 
 
-    public UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
+    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
         // Verifica se o e-mail ou o nome de usuário já estão em uso
         if (userRepository.findByEmail(userRequestDTO.email()).isPresent()) {
             throw new IllegalArgumentException("Email already in use");
@@ -32,7 +35,7 @@ public class UserService {
             throw new IllegalArgumentException("login already in use");
         }
         User user = UserMapper.toEntity(userRequestDTO);
-
+        user.setPassword(passwordEncoder.encode(userRequestDTO.password()));
         user = userRepository.save(user);
 
         return UserMapper.toResponseDTO(user);
@@ -59,7 +62,7 @@ public class UserService {
                 .map(user -> {
                     user.setLogin(userRequestDTO.login());
                     user.setEmail(userRequestDTO.email());
-                    user.setPassword(userRequestDTO.password());
+                    user.setPassword(passwordEncoder.encode(userRequestDTO.password()));
                     user.setGender(userRequestDTO.gender());
                     user.setBirthDate(userRequestDTO.birthDate());
                     user.setTelephone(userRequestDTO.telephone());

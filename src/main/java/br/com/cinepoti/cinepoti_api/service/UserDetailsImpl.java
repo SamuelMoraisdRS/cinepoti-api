@@ -11,13 +11,13 @@ public class UserDetailsImpl implements UserDetails {
 
     private Long id;
 
-    private String name;
+    private final String name;
 
-    private String userName;
+    private final String userName;
 
-    private String email;
+    private final String email;
 
-    private String password;
+    private final String password;
 
     public UserDetailsImpl(Long id, String name, String userName, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {

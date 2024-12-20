@@ -36,6 +36,10 @@ public class JwtUtils {
         return token;
     }
 
+    public String getUserNameToken(String authToken){
+        return  Jwts.parser().setSigningKey(getSignedKey()).build().parseClaimsJws(authToken).getBody().getSubject();
+    }
+
     public Key getSignedKey() {
         logger.debug("Retrieving signing key...");
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwstSecret));

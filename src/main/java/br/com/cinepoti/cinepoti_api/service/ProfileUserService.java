@@ -23,7 +23,7 @@ public class ProfileUserService {
     }
 
     // Adiciona um novo ProfileUser
-    public ProfileUserResponseDTO addProfileUser(ProfileUserRequestDTO profileUserRequestDTO) {
+    public ProfileUserResponseDTO createProfileUser(ProfileUserRequestDTO profileUserRequestDTO) {
         ProfileUser profileUser = ProfileUserMapper.toEntity(profileUserRequestDTO);
         ProfileUser savedProfileUser = profileUserRepository.save(profileUser);
         return ProfileUserMapper.toResponseDTO(savedProfileUser);
