@@ -26,6 +26,8 @@ public record UserRequestDTO(
         @Size(max = 50, message = "Name cannot exceed 50 characters")
         String name,
 
+        String userType,
+
         @Pattern(regexp = "\\d{11}", message = "CPF must have 11 digits")
         @CPF
         String cpf,

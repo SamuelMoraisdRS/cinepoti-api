@@ -38,6 +38,8 @@ public class AuthFilterToken extends OncePerRequestFilter {
         String jwt = null;
         String username = null;
 
+
+
         try {
             // Obtém o token JWT da requisição
             jwt = getToken(request);

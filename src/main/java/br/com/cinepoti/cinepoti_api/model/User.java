@@ -2,6 +2,7 @@ package br.com.cinepoti.cinepoti_api.model;
 
 import br.com.cinepoti.cinepoti_api.enums.Gender;
 import br.com.cinepoti.cinepoti_api.enums.UserType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -55,32 +57,22 @@ public class User implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserType userType;
+    private UserType userType = UserType.COMMON;
+
 
     @Column(nullable = false)
-    private LocalDate registrationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime registrationDate = LocalDateTime.now();
+
+
 
     public User() {}
 
 
-    public User(Long id, LocalDate registrationDate, UserType userType, LocalDate birthdate, Gender gender,
+    public User(Long id, UserType userType, LocalDate birthdate, Gender gender,
                 String phone, String cpf, String name, String email, String passwordHash, String username) {
         this.id = id;
-        this.registrationDate = registrationDate;
         this.userType = userType;
-        this.birthdate = birthdate;
-        this.gender = gender;
-        this.phone = phone;
-        this.cpf = cpf;
-        this.name = name;
-        this.email = email;
-        this.passwordHash = passwordHash;
-        this.username = username;
-    }
-
-    public User(Long id, LocalDate birthdate, Gender gender,
-                String phone, String cpf, String name, String email, String passwordHash, String username) {
-        this.id = id;
         this.birthdate = birthdate;
         this.gender = gender;
         this.phone = phone;
@@ -172,11 +164,11 @@ public class User implements Serializable {
         this.userType = userType;
     }
 
-    public LocalDate getRegistrationDate() {
+    public LocalDateTime getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(LocalDate registrationDate) {
+    public void setRegistrationDate(LocalDateTime registrationDate) {
         this.registrationDate = registrationDate;
     }
 
