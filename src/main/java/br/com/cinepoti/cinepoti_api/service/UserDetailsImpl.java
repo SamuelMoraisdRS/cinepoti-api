@@ -1,6 +1,6 @@
 package br.com.cinepoti.cinepoti_api.service;
 
-import br.com.cinepoti.cinepoti_api.model.user.User;
+import br.com.cinepoti.cinepoti_api.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -30,7 +30,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user){
-        return new UserDetailsImpl(user.getId(), user.getName(), user.getLogin(), user.getEmail(), user.getPassword(), new ArrayList<>());
+        return new UserDetailsImpl(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPasswordHash(), new ArrayList<>());
     }
 
     private Collection<? extends GrantedAuthority> authorities;

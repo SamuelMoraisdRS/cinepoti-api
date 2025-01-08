@@ -1,6 +1,6 @@
 package br.com.cinepoti.cinepoti_api.service;
 
-import br.com.cinepoti.cinepoti_api.model.user.User;
+import br.com.cinepoti.cinepoti_api.model.User;
 import br.com.cinepoti.cinepoti_api.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +19,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Verifica se o usuário existe no banco de dados, caso contrário lança exceção
-        User user = userRepository.findByLogin(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found : " + username));
 
         // Converte o usuário para UserDetailsImpl

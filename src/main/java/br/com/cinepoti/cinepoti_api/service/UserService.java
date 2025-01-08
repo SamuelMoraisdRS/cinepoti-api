@@ -1,7 +1,7 @@
 package br.com.cinepoti.cinepoti_api.service;
 
 import br.com.cinepoti.cinepoti_api.mapper.UserMapper;
-import br.com.cinepoti.cinepoti_api.model.user.User;
+import br.com.cinepoti.cinepoti_api.model.User;
 import br.com.cinepoti.cinepoti_api.dto.request.UserRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.UserResponseDTO;
 import br.com.cinepoti.cinepoti_api.repository.UserRepository;
@@ -31,11 +31,11 @@ public class UserService {
             throw new IllegalArgumentException("Email already in use");
         }
 
-        if (userRepository.findByLogin(userRequestDTO.login()).isPresent()) {
+        if (userRepository.findByUsername(userRequestDTO.username()).isPresent()) {
             throw new IllegalArgumentException("login already in use");
         }
         User user = UserMapper.toEntity(userRequestDTO);
-        user.setPassword(passwordEncoder.encode(userRequestDTO.password()));
+        user.setPasswordHash(passwordEncoder.encode(userRequestDTO.passwordHash()));
         user = userRepository.save(user);
 
         return UserMapper.toResponseDTO(user);
@@ -60,12 +60,12 @@ public class UserService {
     public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
         return userRepository.findById(id)
                 .map(user -> {
-                    user.setLogin(userRequestDTO.login());
+                    user.setUsername(userRequestDTO.username());
                     user.setEmail(userRequestDTO.email());
-                    user.setPassword(passwordEncoder.encode(userRequestDTO.password()));
+                    user.setPasswordHash(passwordEncoder.encode(userRequestDTO.passwordHash()));
                     user.setGender(userRequestDTO.gender());
-                    user.setBirthDate(userRequestDTO.birthDate());
-                    user.setTelephone(userRequestDTO.telephone());
+                    user.setBirthdate(userRequestDTO.birthdate());
+                    user.setPhone(userRequestDTO.phone());
                     user.setCpf(userRequestDTO.cpf());
                     user = userRepository.save(user);
                     return UserMapper.toResponseDTO(user);
