@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
+
     private final JwtUtils jwtUtils;
 
     @Autowired
@@ -24,27 +25,29 @@ public class AuthService {
         this.jwtUtils = jwtUtils;
     }
 
-    public ResponseEntity<AccessResponseDTO> login(AuthenticationRequestDTO authDTO){
+    /**
+     * Handles the login process by authenticating the user and generating a JWT token.
+     *
+     * This method attempts to authenticate the user based on the provided username and password.
+     * If the authentication is successful, a JWT token is generated and returned in the response.
+     * If the authentication fails (e.g., invalid username or password), an Unauthorized response
+     * is returned with a relevant error message.
+     *
+     * @param authDTO The authentication request containing the username and password.
+     * @return ResponseEntity containing the generated token or an error message.
+     */
+    public ResponseEntity<AccessResponseDTO> login(AuthenticationRequestDTO authDTO) {
         try {
-            // Criando token de autenticação
             UsernamePasswordAuthenticationToken userAuth =
                     new UsernamePasswordAuthenticationToken(authDTO.userName(), authDTO.password());
 
-            // Autenticando usuário
             Authentication authentication = authenticationManager.authenticate(userAuth);
-
-            // Recuperando detalhes do usuário autenticado
             UserDetailsImpl userAuthenticate = (UserDetailsImpl) authentication.getPrincipal();
-
-            // Gerando o token JWT
             String token = jwtUtils.generateTokenFromUserDetailsImpl(userAuthenticate);
-
-            // Retornando o token no corpo da resposta
             return ResponseEntity.ok(new AccessResponseDTO(token));
 
         } catch (BadCredentialsException e) {
-            // Retornando resposta com erro genérico
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AccessResponseDTO("Usuário ou senha inválidos"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AccessResponseDTO("Invalid username or password"));
         }
     }
 }

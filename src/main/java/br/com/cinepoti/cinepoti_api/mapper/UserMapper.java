@@ -43,6 +43,7 @@ public class UserMapper {
         // Create the UserResponseDTO using data from the User entity
         return new UserResponseDTO(
                 user.getId(),
+                user.getUserType().toString(),
                 user.getUsername(), // Reference to 'username'
                 user.getEmail(),
                 user.getName(),

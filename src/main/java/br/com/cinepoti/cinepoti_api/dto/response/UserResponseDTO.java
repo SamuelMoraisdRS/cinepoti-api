@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 public record UserResponseDTO(
         Long id,
+        String userType,
         String username,
         String email,
         String name,

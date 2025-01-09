@@ -16,6 +16,13 @@ public class UserDetailsServiceImp implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Loads user details by username.
+     *
+     * @param username The username to search for.
+     * @return UserDetails of the user.
+     * @throws UsernameNotFoundException if the user is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Verifica se o usuário existe no banco de dados, caso contrário lança exceção
