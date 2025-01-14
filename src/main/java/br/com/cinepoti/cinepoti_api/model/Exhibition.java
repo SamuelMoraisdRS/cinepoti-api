@@ -3,6 +3,7 @@ package br.com.cinepoti.cinepoti_api.model;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -25,7 +26,18 @@ public class Exhibition implements Serializable {
     @Column(nullable = false)
     private LocalDateTime startTime;
 
+    // Adicionado para simplificar a consulta. Reduz Joins na tabela Booking, facilitando busca por assentos livres
+    @OneToMany(mappedBy = "exhibition", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<BookTicket> tickets;
+
+    @OneToMany(mappedBy = "exhibition", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Booking> bookings;
+
     public Exhibition() {
+    }
+
+    public Exhibition(Long id) {
+        this.id = id;
     }
 
     public Exhibition(Long id, LocalDateTime startTime, CinemaRoom cinemaRoom, Movie movie) {
@@ -33,6 +45,13 @@ public class Exhibition implements Serializable {
         this.startTime = startTime;
         this.cinemaRoom = cinemaRoom;
         this.movie = movie;
+    }
+
+    public Exhibition(Long id, LocalDateTime startTime, Long cinemaRoomId, Long movieId) {
+        this.id = id;
+        this.startTime = startTime;
+        this.cinemaRoom = new CinemaRoom(cinemaRoomId);
+        this.movie = new Movie(movieId);
     }
 
     public Long getId() {

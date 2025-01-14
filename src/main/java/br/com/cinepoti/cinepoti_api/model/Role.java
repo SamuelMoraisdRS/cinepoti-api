@@ -1,4 +1,4 @@
-package br.com.cinepoti.cinepoti_api.model.role;
+package br.com.cinepoti.cinepoti_api.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

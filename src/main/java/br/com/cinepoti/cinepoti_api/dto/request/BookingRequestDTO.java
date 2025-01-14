@@ -1,6 +1,5 @@
 package br.com.cinepoti.cinepoti_api.dto.request;
 
-import br.com.cinepoti.cinepoti_api.enums.BookingStatus;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 

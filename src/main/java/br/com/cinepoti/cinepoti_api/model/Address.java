@@ -49,6 +49,10 @@ public class Address implements Serializable {
 
     public Address() {}
 
+    public Address(Long id) {
+        this.id = id;
+    }
+
     public Address(Long id, String street, String city, String state, String neighborhood, String streetNumber,
                    String cep) {
         this.id = id;

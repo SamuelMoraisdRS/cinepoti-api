@@ -1,6 +1,6 @@
 package br.com.cinepoti.cinepoti_api.service;
 
-import br.com.cinepoti.cinepoti_api.model.movie.Genre;
+import br.com.cinepoti.cinepoti_api.model.Genre;
 import br.com.cinepoti.cinepoti_api.repository.GenreRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +17,10 @@ public class GenreService {
         this.genreRepository = genreRepository;
     }
 
-
+    // TODO: Paginação de consulta
     public List<Genre> getAllGenres() {
         return genreRepository.findAll().stream()
-          .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     public Genre getGenreById(Long id) {

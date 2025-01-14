@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -38,7 +39,13 @@ public class Booking implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<BookTicket> tickets;
+
     public Booking() {}
+    public Booking(Long id) {
+        this.id = id;
+    }
 
 
     public Booking(Long id, User user, Exhibition exhibition, BookingStatus status, LocalDate bookingDate,

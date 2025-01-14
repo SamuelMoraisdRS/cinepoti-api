@@ -32,6 +32,10 @@ public class Seat {
     public Seat() {
     }
 
+    public Seat(Long id){
+        this.id = id;
+    }
+
     public Seat(Long id, Double price, CinemaRoom cinemaRoom, String number, String row) {
         this.id = id;
         this.price = price;
