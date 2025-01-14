@@ -68,7 +68,9 @@ public class UserService {
                     user.setPhone(userRequestDTO.phone());
                     user.setCpf(userRequestDTO.cpf());
                     user = userRepository.save(user);
-                    return UserMapper.toResponseDTO(user);
+
+                    User updatedUser = this.userRepository.save(user);
+                    return UserMapper.toResponseDTO(updatedUser);
                 })
                 .orElse(null);
     }

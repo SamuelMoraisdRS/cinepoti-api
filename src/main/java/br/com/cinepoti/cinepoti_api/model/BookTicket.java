@@ -1,11 +1,7 @@
 package br.com.cinepoti.cinepoti_api.model;
 
 
-import br.com.cinepoti.cinepoti_api.model.Booking;
-import br.com.cinepoti.cinepoti_api.model.Seat;
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.Objects;
 
 @Entity
@@ -24,13 +20,25 @@ public class BookTicket {
     @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
 
+    @ManyToOne
+    @JoinColumn(name = "exhibition_id", nullable = false)
+    private Exhibition exhibition;
+
     public BookTicket() {
     }
 
-    public BookTicket(Long id, Seat seat, Booking booking) {
+    public BookTicket(Long id, Seat seat, Booking booking, Exhibition exhibition) {
         this.id = id;
         this.seat = seat;
         this.booking = booking;
+        this.exhibition = exhibition;
+    }
+
+    public BookTicket(Long id, Long seatId, Long bookingId, Long exhibitionId) {
+        this.id = id;
+        this.seat = new Seat(seatId);
+        this.booking = new Booking(bookingId);
+        this.exhibition = new Exhibition(exhibitionId);
     }
 
     public Long getId() {

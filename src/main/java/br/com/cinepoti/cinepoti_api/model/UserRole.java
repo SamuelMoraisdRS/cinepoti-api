@@ -1,6 +1,6 @@
-package br.com.cinepoti.cinepoti_api.model.userrole;
+package br.com.cinepoti.cinepoti_api.model;
 
-import br.com.cinepoti.cinepoti_api.model.role.Role;
+import br.com.cinepoti.cinepoti_api.model.Role;
 import br.com.cinepoti.cinepoti_api.model.User;
 import jakarta.persistence.*;
 
