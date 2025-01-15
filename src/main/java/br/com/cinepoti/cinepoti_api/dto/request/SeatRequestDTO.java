@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record SeatRequestDTO(
-        @NotNull(message = "Cinema Room ID is required")
+        // @NotNull(message = "Cinema Room ID is required")
         Long cinemaRoomId,
 
         @NotNull(message = "Row is required")

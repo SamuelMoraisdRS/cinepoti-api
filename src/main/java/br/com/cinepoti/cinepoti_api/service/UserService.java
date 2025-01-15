@@ -1,9 +1,11 @@
 package br.com.cinepoti.cinepoti_api.service;
 
 import br.com.cinepoti.cinepoti_api.mapper.UserMapper;
+import br.com.cinepoti.cinepoti_api.model.Profile;
 import br.com.cinepoti.cinepoti_api.model.User;
 import br.com.cinepoti.cinepoti_api.dto.request.UserRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.UserResponseDTO;
+import br.com.cinepoti.cinepoti_api.repository.ProfileRepository;
 import br.com.cinepoti.cinepoti_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,11 +17,14 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProfileRepository profileRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.profileRepository = profileRepository;
+
     }
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
@@ -29,14 +34,23 @@ public class UserService {
         }
 
         if (userRepository.findByUsername(userRequestDTO.username()).isPresent()) {
-            throw new IllegalArgumentException("login already in use");
+            throw new IllegalArgumentException("Login already in use");
         }
-        User user = UserMapper.toEntity(userRequestDTO);
+
+        Profile profile = new Profile();
+
+        User user = UserMapper.toEntity(userRequestDTO, profile);
         user.setPasswordHash(passwordEncoder.encode(userRequestDTO.passwordHash()));
+
+        profile.setUser(user);
+
         user = userRepository.save(user);
+
+        profileRepository.save(profile);
 
         return UserMapper.toResponseDTO(user);
     }
+
 
     // Recupera todos os usuários
     public List<UserResponseDTO> getAllUsers() {
@@ -67,15 +81,11 @@ public class UserService {
     public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
         return userRepository.findById(id)
                 .map(user -> {
-                    user.setUsername(userRequestDTO.username());
-                    user.setEmail(userRequestDTO.email());
-                    user.setPasswordHash(passwordEncoder.encode(userRequestDTO.passwordHash()));
-                    user.setGender(userRequestDTO.gender());
-                    user.setBirthdate(userRequestDTO.birthdate());
-                    user.setPhone(userRequestDTO.phone());
-                    user.setCpf(userRequestDTO.cpf());
+                    user = UserMapper.toEntity(userRequestDTO, null);
                     user = userRepository.save(user);
-                    return UserMapper.toResponseDTO(user);
+
+                    User updatedUser = this.userRepository.save(user);
+                    return UserMapper.toResponseDTO(updatedUser);
                 })
                 .orElse(null);
     }

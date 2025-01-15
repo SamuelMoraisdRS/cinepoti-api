@@ -2,11 +2,15 @@ package br.com.cinepoti.cinepoti_api.controller;
 
 import br.com.cinepoti.cinepoti_api.dto.request.UserRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.UserResponseDTO;
+import br.com.cinepoti.cinepoti_api.service.UserDetailsImpl;
 import br.com.cinepoti.cinepoti_api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,12 +40,14 @@ public class UserController {
     }
 
     // Endpoint para listar todos os usuários
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         List<UserResponseDTO> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     // Endpoint para buscar um usuário por ID
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable("id") Long id) {
@@ -56,7 +62,14 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable("id") Long id,
-            @RequestBody UserRequestDTO userRequestDTO) {
+            @RequestBody UserRequestDTO userRequestDTO,
+            Authentication authentication) {
+
+        // Verifica se o usuário autenticado é o mesmo que está tentando atualizar
+        UserDetailsImpl currentUser = (UserDetailsImpl) authentication.getPrincipal();
+        if (!currentUser.getId().equals(id) && !currentUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);  // Não autorizado
+        }
 
         UserResponseDTO userResponseDTO = userService.updateUser(id, userRequestDTO);
         if (userResponseDTO != null) {
@@ -65,6 +78,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);

@@ -8,6 +8,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -37,51 +41,35 @@ public class User implements Serializable {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = true)
-    private String name;
-
-    @Column(nullable = true, unique = true, length = 11)
-    @Pattern(regexp = "\\d{11}", message = "CPF must have 11 digits")
-    private String cpf;
-
-    @Pattern(regexp = "\\d{10,15}", message = "Telephone must be between 10 and 15 digits")
-    @Column(nullable = true)
-    private String phone;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
-    private Gender gender;
-
-    @Column(nullable = true)
-    private LocalDate birthdate;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserType userType = UserType.COMMON;
+
+
 
 
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registrationDate = LocalDateTime.now();
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_profile")
+    private Profile profile;
+
 
 
     public User() {}
 
 
-    public User(Long id, UserType userType, LocalDate birthdate, Gender gender,
-                String phone, String cpf, String name, String email, String passwordHash, String username) {
+    public User(Long id, UserType userType, String passwordHash, String username, String email, Profile profile) {
         this.id = id;
         this.userType = userType;
-        this.birthdate = birthdate;
-        this.gender = gender;
-        this.phone = phone;
-        this.cpf = cpf;
-        this.name = name;
-        this.email = email;
         this.passwordHash = passwordHash;
         this.username = username;
+        this.email = email;
+        this.profile = profile;
     }
+
 
 
     public Long getId() {
@@ -114,46 +102,6 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public  String getPhone() {
-        return phone;
-    }
-
-    public void setPhone (String phone) {
-        this.phone = phone;
-    }
-
-    public LocalDate getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate;
     }
 
     public UserType getUserType() {

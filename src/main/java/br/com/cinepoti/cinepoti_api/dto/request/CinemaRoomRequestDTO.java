@@ -1,5 +1,7 @@
 package br.com.cinepoti.cinepoti_api.dto.request;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -9,5 +11,7 @@ public record CinemaRoomRequestDTO(
         String name,
 
         @NotNull(message = "Address ID is required")
-        Long addressId
+        Long addressId,
+
+        List<SeatRequestDTO> seats
 ) {}

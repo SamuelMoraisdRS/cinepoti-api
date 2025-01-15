@@ -38,6 +38,8 @@ public class Booking implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+
+
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private Map<Long, Ticket> tickets;
 
