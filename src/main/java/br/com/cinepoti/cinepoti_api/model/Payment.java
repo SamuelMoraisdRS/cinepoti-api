@@ -34,7 +34,7 @@ public class Payment implements Serializable {
     @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
