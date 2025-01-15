@@ -11,6 +11,11 @@ import org.hibernate.validator.constraints.br.CPF;
 import java.time.LocalDate;
 
 public record UserRequestDTO(
+
+        @NotNull(message = "Email is required")
+        @Email(message = "Invalid email format")
+        String email,
+
         @NotNull(message = "Username is required")
         @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
         String username,
@@ -19,24 +24,7 @@ public record UserRequestDTO(
         @Size(min = 8, message = "Password must be at least 8 characters")
         String passwordHash,
 
-        @NotNull(message = "Email is required")
-        @Email(message = "Invalid email format")
-        String email,
 
-        @Size(max = 50, message = "Name cannot exceed 50 characters")
-        String name,
+        String userType
 
-        String userType,
-
-        @Pattern(regexp = "\\d{11}", message = "CPF must have 11 digits")
-        @CPF
-        String cpf,
-
-        @Pattern(regexp = "\\d{10,15}", message = "Telephone must be between 10 and 15 digits")
-        String phone,
-
-        Gender gender,
-
-        @JsonFormat(pattern = "dd-MM-yyyy")
-        LocalDate birthdate
 ) {}

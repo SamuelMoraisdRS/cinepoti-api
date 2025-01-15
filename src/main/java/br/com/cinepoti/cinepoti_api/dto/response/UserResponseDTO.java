@@ -8,11 +8,5 @@ public record UserResponseDTO(
         Long id,
         String userType,
         String username,
-        String email,
-        String name,
-        String cpf,
-        String phone,
-        Gender gender,
-        @JsonFormat(pattern = "dd-MM-yyyy")
-        LocalDate birthdate
+        String email
 ) {}

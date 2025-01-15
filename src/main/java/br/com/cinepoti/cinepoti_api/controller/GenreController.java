@@ -1,10 +1,12 @@
 package br.com.cinepoti.cinepoti_api.controller;
 
-import br.com.cinepoti.cinepoti_api.model.movie.Genre;
+
+import br.com.cinepoti.cinepoti_api.model.Genre;
 import br.com.cinepoti.cinepoti_api.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,12 +22,13 @@ public class GenreController {
         this.genreService = genreService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Genre>> getAllGenres() {
         List<Genre> genres = genreService.getAllGenres();
         return new ResponseEntity<>(genres, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<Genre> getGenreById(@PathVariable("id") Long id) {
         Genre genre = genreService.getGenreById(id);

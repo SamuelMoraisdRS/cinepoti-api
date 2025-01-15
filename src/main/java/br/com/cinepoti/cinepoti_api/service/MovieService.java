@@ -11,7 +11,9 @@ import br.com.cinepoti.cinepoti_api.mapper.MovieMapper;
 import br.com.cinepoti.cinepoti_api.model.Movie;
 import br.com.cinepoti.cinepoti_api.repository.ExhibitionRepository;
 import br.com.cinepoti.cinepoti_api.repository.MovieRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MovieService {
   private final MovieRepository movieRepository;
   private final ExhibitionRepository exhibitionRepository;

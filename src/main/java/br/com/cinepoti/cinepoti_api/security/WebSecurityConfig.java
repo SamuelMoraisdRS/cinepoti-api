@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -120,13 +121,20 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/auth/**").permitAll() // Public routes
                             .requestMatchers("/usuarios/cadastrar").permitAll() // Public registration route
                             .requestMatchers("/admin/**").hasRole("ADMIN") // Only accessible by admins
-                            .requestMatchers("/user/**").hasAnyRole("ADMIN", "COMMON") // Accessible by admins and common users
+                            .requestMatchers("/h2-console/**").permitAll()
                             .anyRequest().authenticated(); // Any other request requires authentication
+
                 });
+
+
 
         // Add the authentication filter (AuthFilterToken) to the filter chain
         logger.debug("Adding AuthFilterToken to the filter chain.");
         http.addFilterBefore(authFilterToken(), UsernamePasswordAuthenticationFilter.class);
+
+        // Enable H2 console access with some specific settings (CSRF and frame options)
+        http.headers().frameOptions().sameOrigin(); // Allow loading of H2 console in iframe
+
 
         logger.info("SecurityFilterChain configured successfully.");
         return http.build();

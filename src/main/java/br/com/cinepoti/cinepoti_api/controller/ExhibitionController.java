@@ -3,6 +3,7 @@ package br.com.cinepoti.cinepoti_api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.cinepoti.cinepoti_api.dto.request.ExhibitionRequestDTO;
@@ -14,7 +15,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/filmes")
+@RequestMapping("/sessoes")
 @CrossOrigin
 public class ExhibitionController {
   private final ExhibitionService exhibitionService;
@@ -24,6 +25,7 @@ public class ExhibitionController {
     this.exhibitionService = exhibitionService;
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @PostMapping
   public ResponseEntity<ExhibitionResponseDTO> createExhibition(@Valid @RequestBody ExhibitionRequestDTO exhibitionRequestDTO) {
     ExhibitionResponseDTO exhibitionResponseDTO = this.exhibitionService.createExhibition(exhibitionRequestDTO);
@@ -56,6 +58,7 @@ public class ExhibitionController {
     return new ResponseEntity<>(exhibition, HttpStatus.OK);
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @PutMapping("/{id}")
   public ResponseEntity<ExhibitionResponseDTO> updateExhibition(
       @PathVariable("id") Long id,
@@ -68,6 +71,7 @@ public class ExhibitionController {
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteExhibition(@PathVariable("id") Long id) {
     this.exhibitionService.deleteExhibition(id);

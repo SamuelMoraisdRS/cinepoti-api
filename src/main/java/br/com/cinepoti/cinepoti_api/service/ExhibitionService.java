@@ -17,7 +17,9 @@ import br.com.cinepoti.cinepoti_api.repository.CinemaRoomRepository;
 import br.com.cinepoti.cinepoti_api.repository.ExhibitionRepository;
 import br.com.cinepoti.cinepoti_api.repository.MovieRepository;
 import br.com.cinepoti.cinepoti_api.repository.SeatRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ExhibitionService {
   private final ExhibitionRepository exhibitionRepository;
   private final MovieRepository movieRepository;

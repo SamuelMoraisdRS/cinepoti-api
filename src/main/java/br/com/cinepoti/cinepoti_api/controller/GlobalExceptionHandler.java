@@ -1,5 +1,7 @@
 package br.com.cinepoti.cinepoti_api.controller;
 
+import br.com.cinepoti.cinepoti_api.exception.UsernameAlreadyInUseException;
+import br.com.cinepoti.cinepoti_api.security.jwt.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -35,4 +37,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(errorResponse);
     }
+
+
+    // Trata a exceção UsernameAlreadyInUseException
+    @ExceptionHandler(UsernameAlreadyInUseException.class)
+    public ResponseEntity<String> handleUsernameAlreadyInUse(UsernameAlreadyInUseException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);  // Retorna 400 com a mensagem
+    }
+
+    @ExceptionHandler(SecurityUtils.UnauthorizedUserException.class)
+    public ResponseEntity<String> handleUnauthorizedUser(SecurityUtils.UnauthorizedUserException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);  // Retorna 400 com a mensagem
+    }
+
 }

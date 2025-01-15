@@ -3,6 +3,7 @@ package br.com.cinepoti.cinepoti_api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.cinepoti.cinepoti_api.dto.request.MovieRequestDTO;
@@ -23,6 +24,7 @@ public class MovieController {
     this.movieService = movieService;
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @PostMapping
   public ResponseEntity<MovieResponseDTO> createMovie(@Valid @RequestBody MovieRequestDTO movieRequestDTO) {
     MovieResponseDTO movieResponseDTO = this.movieService.createMovie(movieRequestDTO);
@@ -45,6 +47,7 @@ public class MovieController {
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @PutMapping("/{id}")
   public ResponseEntity<MovieResponseDTO> updateMovie(
       @PathVariable("id") Long id,
@@ -57,6 +60,7 @@ public class MovieController {
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteMovie(@PathVariable("id") Long id) {
     this.movieService.deleteMovie(id);

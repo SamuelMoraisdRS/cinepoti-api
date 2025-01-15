@@ -12,14 +12,15 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
   List<Seat> findByCinemaRoomId(Long cinemaRoomId);
 
   @Query("""
-        SELECT s
-        FROM CP_SEAT s
-        WHERE s.cinemaRoom_id = :cinemaRoomId
-        AND s.id NOT IN (
-            SELECT bt.seat_id
-            FROM CP_BOOK_TICKET bt
-            WHERE bt.exhibition_id = :exhibitionId
-        )
-    """)
+              SELECT s
+              FROM Seat s
+              WHERE s.cinemaRoom.id = :cinemaRoomId
+              AND s.id NOT IN (
+                  SELECT bt.seat.id
+                  FROM BookTicket bt
+                  WHERE bt.exhibition.id = :exhibitionId
+              )
+          """)
   List<Seat> findAvailableSeats(@Param("cinemaRoomId") Long cinemaRoomId, @Param("exhibitionId") Long exhibitionId);
 }
+

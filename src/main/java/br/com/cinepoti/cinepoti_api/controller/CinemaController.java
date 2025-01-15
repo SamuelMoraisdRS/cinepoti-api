@@ -3,6 +3,7 @@ package br.com.cinepoti.cinepoti_api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.cinepoti.cinepoti_api.dto.request.CinemaRoomRequestDTO;
@@ -22,6 +23,7 @@ public class CinemaController {
         this.cinemaRoomService = cinemaRoomService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<CinemaRoomResponseDTO> createCinemaRoom(@RequestBody CinemaRoomRequestDTO cinemaRoomRequestDTO){
       CinemaRoomResponseDTO cinemaRoom = this.cinemaRoomService.createCinemaRoom(cinemaRoomRequestDTO);
@@ -43,6 +45,7 @@ public class CinemaController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<CinemaRoomResponseDTO> updateCinemaRoom(
             @PathVariable("id") Long id,
@@ -55,6 +58,7 @@ public class CinemaController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCinemaRoom(@PathVariable("id") Long id) {
         this.cinemaRoomService.deleteCinemaRoom(id);

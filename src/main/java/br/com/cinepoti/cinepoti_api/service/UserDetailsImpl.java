@@ -16,18 +16,15 @@ public class UserDetailsImpl implements UserDetails {
 
     private Long id;
 
-    private final String name;
-
     private final String userName;
 
     private final String email;
 
     private final String password;
 
-    public UserDetailsImpl(Long id, String name, String userName, String email, String password,
+    public UserDetailsImpl(Long id, String userName, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.name = name;
         this.userName = userName;
         this.email = email;
         this.password = password;
@@ -45,7 +42,7 @@ public class UserDetailsImpl implements UserDetails {
                 new SimpleGrantedAuthority(user.getUserType().name())
         );
 
-        return new UserDetailsImpl(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPasswordHash(), authorities);
+        return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(), user.getPasswordHash(), authorities);
     }
 
     private final Collection<? extends GrantedAuthority> authorities;
