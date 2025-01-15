@@ -17,13 +17,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-
     }
-
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
         // Verifica se o e-mail ou o nome de usuário já estão em uso
@@ -54,6 +51,16 @@ public class UserService {
         return userRepository.findById(id)
                 .map(UserMapper::toResponseDTO)
                 .orElse(null);
+    }
+
+    /*
+     * Métodos com "object" retornam instancias das entidades, ao invés de DTOs. Fiz eles pra serem usados
+     * dentro da camada Service, com os que retornam DTOs sendo reservados p/ comunicação cm os controllers.
+     * Um alternativa a isso seria sobrecarregar o metodo toEntity dos mappers para gerar instancias a partir
+     * dos ResponsesDTOs, mas desta forma poupamos uma chamada de função.
+     */
+    public User getUserObjectById(Long id) {
+        return userRepository.findById(id).orElseThrow();
     }
 
     // Atualiza um usuário existente
