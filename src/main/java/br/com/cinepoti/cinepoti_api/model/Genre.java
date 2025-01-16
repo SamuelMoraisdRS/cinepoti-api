@@ -22,9 +22,6 @@ public class Genre implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "Movie_Genre_id")
-    private MovieGenre movieGenre;
 
     @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserGenrePreference> userGenrePreferences;

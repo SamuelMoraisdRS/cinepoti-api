@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -35,9 +36,13 @@ public class Movie implements Serializable {
     @Column(nullable = true, length = 500)
     private String synopsis;
 
-    @ManyToOne
-    @JoinColumn(name = "Movie_Genre_id")
-    private MovieGenre movieGenre;
+    @ManyToMany
+    @JoinTable(
+            name = "CP_MOVIE_GENRE",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private List<Genre> genres;
 
     public Movie() {}
 
@@ -45,13 +50,14 @@ public class Movie implements Serializable {
         this.id = id;
     }
 
-    public Movie(Long id, String title, Integer duration, LocalDate releaseDate, Double rating, String synopsis) {
+    public Movie(Long id, List<Genre> genres, String synopsis, Double rating, LocalDate releaseDate, Integer duration, String title) {
         this.id = id;
-        this.title = title;
-        this.duration = duration;
-        this.releaseDate = releaseDate;
-        this.rating = rating;
+        this.genres = genres;
         this.synopsis = synopsis;
+        this.rating = rating;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.title = title;
     }
 
     public Long getId() {
@@ -102,12 +108,12 @@ public class Movie implements Serializable {
         this.synopsis = synopsis;
     }
 
-    public MovieGenre getMovieGenre() {
-        return movieGenre;
+    public List<Genre> getGenres() {
+        return genres;
     }
 
-    public void setMovieGenre(MovieGenre movieGenre) {
-        this.movieGenre = movieGenre;
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 
     @Override

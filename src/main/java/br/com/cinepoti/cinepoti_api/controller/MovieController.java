@@ -25,7 +25,7 @@ public class MovieController {
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
-  @PostMapping
+  @PostMapping("/cadastrar")
   public ResponseEntity<MovieResponseDTO> createMovie(@Valid @RequestBody MovieRequestDTO movieRequestDTO) {
     MovieResponseDTO movieResponseDTO = this.movieService.createMovie(movieRequestDTO);
 

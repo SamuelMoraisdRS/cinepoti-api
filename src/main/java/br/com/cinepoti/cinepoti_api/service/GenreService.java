@@ -1,5 +1,8 @@
 package br.com.cinepoti.cinepoti_api.service;
 
+import br.com.cinepoti.cinepoti_api.dto.request.GenreRequestDTO;
+import br.com.cinepoti.cinepoti_api.dto.response.GenreResponseDTO;
+import br.com.cinepoti.cinepoti_api.mapper.GenreMapper;
 import br.com.cinepoti.cinepoti_api.model.Genre;
 import br.com.cinepoti.cinepoti_api.repository.GenreRepository;
 
@@ -15,6 +18,11 @@ public class GenreService {
     @Autowired
     public GenreService(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
+    }
+
+    public GenreResponseDTO createGenre(GenreRequestDTO requestDTO){
+        Genre genre = GenreMapper.toEntity(requestDTO);
+        return GenreMapper.toResponseDTO(genreRepository.save(genre));
     }
 
     // TODO: Paginação de consulta

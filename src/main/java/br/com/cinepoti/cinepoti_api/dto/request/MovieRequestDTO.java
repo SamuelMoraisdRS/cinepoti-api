@@ -3,6 +3,7 @@ package br.com.cinepoti.cinepoti_api.dto.request;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
 public record MovieRequestDTO(
         @NotNull(message = "Title is required")
@@ -14,6 +15,9 @@ public record MovieRequestDTO(
 
         @NotNull(message = "Release date is required")
         LocalDate releaseDate,
+
+        @NotNull(message = "Release genres is required")
+        List<Long> genres,
 
         Double rating,  // Rating (optional)
 

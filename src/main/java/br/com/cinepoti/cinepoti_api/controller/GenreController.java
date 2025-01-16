@@ -1,8 +1,15 @@
 package br.com.cinepoti.cinepoti_api.controller;
 
 
+import br.com.cinepoti.cinepoti_api.dto.request.CinemaRoomRequestDTO;
+import br.com.cinepoti.cinepoti_api.dto.request.GenreRequestDTO;
+import br.com.cinepoti.cinepoti_api.dto.request.UserRequestDTO;
+import br.com.cinepoti.cinepoti_api.dto.response.CinemaRoomResponseDTO;
+import br.com.cinepoti.cinepoti_api.dto.response.GenreResponseDTO;
+import br.com.cinepoti.cinepoti_api.dto.response.UserResponseDTO;
 import br.com.cinepoti.cinepoti_api.model.Genre;
 import br.com.cinepoti.cinepoti_api.service.GenreService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +27,14 @@ public class GenreController {
     @Autowired
     public  GenreController(GenreService genreService){
         this.genreService = genreService;
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/cadastrar")
+    public ResponseEntity<GenreResponseDTO> createUser(@Valid @RequestBody GenreRequestDTO genreRequestDTO) {
+        GenreResponseDTO genreResponseDTO = genreService.createGenre(genreRequestDTO);
+
+        return new ResponseEntity<>(genreResponseDTO, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

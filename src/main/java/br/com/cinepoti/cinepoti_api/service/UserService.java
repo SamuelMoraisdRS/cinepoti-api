@@ -49,6 +49,9 @@ public class UserService {
         }
 
         Profile profile = new Profile();
+        if(userRequestDTO.idProfile() != null){
+            profile.setId(userRequestDTO.idProfile());
+        }
 
         User user = UserMapper.toEntity(userRequestDTO, profile);
         user.setPasswordHash(passwordEncoder.encode(userRequestDTO.passwordHash()));

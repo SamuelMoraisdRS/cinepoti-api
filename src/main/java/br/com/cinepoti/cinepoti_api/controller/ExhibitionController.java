@@ -26,7 +26,7 @@ public class ExhibitionController {
   }
 
   @PreAuthorize("hasAuthority('COMMON')")
-  @PostMapping
+  @PostMapping("/cadastrar")
   public ResponseEntity<ExhibitionResponseDTO> createExhibition(@Valid @RequestBody ExhibitionRequestDTO exhibitionRequestDTO) {
     ExhibitionResponseDTO exhibitionResponseDTO = this.exhibitionService.createExhibition(exhibitionRequestDTO);
 

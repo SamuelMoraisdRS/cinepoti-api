@@ -13,12 +13,13 @@ public class MovieGenre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @ManyToOne
-    @JoinColumn(name = "movie_id", nullable = false)
+    @JoinColumn(name = "movie_id", nullable = false) // chave estrangeira para Movie
     private Movie movie;
 
     @ManyToOne
-    @JoinColumn(name = "genre_id", nullable = false)
+    @JoinColumn(name = "genre_id", nullable = false) // chave estrangeira para Genre
     private Genre genre;
 
     public MovieGenre() {

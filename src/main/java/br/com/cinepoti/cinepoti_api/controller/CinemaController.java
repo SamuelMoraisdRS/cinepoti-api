@@ -24,7 +24,7 @@ public class CinemaController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping
+    @PostMapping("/cadastrar")
     public ResponseEntity<CinemaRoomResponseDTO> createCinemaRoom(@RequestBody CinemaRoomRequestDTO cinemaRoomRequestDTO){
       CinemaRoomResponseDTO cinemaRoom = this.cinemaRoomService.createCinemaRoom(cinemaRoomRequestDTO);
       return new ResponseEntity<>(cinemaRoom, HttpStatus.OK);

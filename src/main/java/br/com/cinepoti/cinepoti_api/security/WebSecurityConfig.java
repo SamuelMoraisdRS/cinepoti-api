@@ -119,8 +119,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     logger.info("Configuring authorization rules.");
                     auth.requestMatchers("/auth/**").permitAll() // Public routes
-                            .requestMatchers("/usuarios/cadastrar").permitAll() // Public registration route
-                            .requestMatchers("/admin/**").hasRole("ADMIN") // Only accessible by admins
+                            .requestMatchers("/**").permitAll() // Public registration route
+//                            .requestMatchers("/usuarios/cadastrar").permitAll() // Public registration route
+//                            .requestMatchers("/admin/**").hasRole("ADMIN") // Only accessible by admins
                             .requestMatchers("/h2-console/**").permitAll()
                             .anyRequest().authenticated(); // Any other request requires authentication
 

@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UserGenrePreferenceRepository extends JpaRepository<UserGenrePreference, Long> {
-  @Query("SELECT * FROM CP_USER_GENRE_PREFERENCE WHERE user_id = :userID")
-  List<UserGenrePreference> findByUserId(Long userId);
+  @Query("SELECT u FROM UserGenrePreference u WHERE u.user.id = :userID")
+  List<UserGenrePreference> findByUserId(@Param("userID") Long userId);
+
 }
