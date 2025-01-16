@@ -1,11 +1,15 @@
 package br.com.cinepoti.cinepoti_api.service;
 
 import br.com.cinepoti.cinepoti_api.mapper.UserMapper;
+import br.com.cinepoti.cinepoti_api.model.Genre;
 import br.com.cinepoti.cinepoti_api.model.Profile;
 import br.com.cinepoti.cinepoti_api.model.User;
+import br.com.cinepoti.cinepoti_api.model.UserGenrePreference;
 import br.com.cinepoti.cinepoti_api.dto.request.UserRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.UserResponseDTO;
+import br.com.cinepoti.cinepoti_api.repository.GenreRepository;
 import br.com.cinepoti.cinepoti_api.repository.ProfileRepository;
+import br.com.cinepoti.cinepoti_api.repository.UserGenrePreferenceRepository;
 import br.com.cinepoti.cinepoti_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,15 +23,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
+    private final GenreRepository genreRepository;
+    private final UserGenrePreferenceRepository userGenrePreferenceRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ProfileRepository profileRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+            ProfileRepository profileRepository, GenreRepository genreRepository,
+            UserGenrePreferenceRepository userGenrePreferenceRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileRepository = profileRepository;
-
+        this.genreRepository = genreRepository;
+        this.userGenrePreferenceRepository = userGenrePreferenceRepository;
     }
-
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
         // Verifica se o e-mail ou o nome de usuário já estão em uso
@@ -53,6 +61,27 @@ public class UserService {
         return UserMapper.toResponseDTO(user);
     }
 
+    public void saveUserGenrePreferences(Long userId, List<Long> genreIds) {
+        // Validar se o usuário existe
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+
+        // Buscar os gêneros correspondentes
+        List<Genre> genres = genreRepository.findAllById(genreIds);
+
+        // Criar as preferências
+        List<UserGenrePreference> preferences = genres.stream()
+                .map(genre -> {
+                    UserGenrePreference preference = new UserGenrePreference();
+                    preference.setUser(user);
+                    preference.setGenre(genre);
+                    return preference;
+                })
+                .collect(Collectors.toList());
+
+        // Salvar todas as preferências de uma vez
+        userGenrePreferenceRepository.saveAll(preferences);
+    }
 
     // Recupera todos os usuários
     public List<UserResponseDTO> getAllUsers() {

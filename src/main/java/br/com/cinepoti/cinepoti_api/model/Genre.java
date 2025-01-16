@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +25,9 @@ public class Genre implements Serializable {
     @ManyToOne
     @JoinColumn(name = "Movie_Genre_id")
     private MovieGenre movieGenre;
+
+    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserGenrePreference> userGenrePreferences;
 
     public Genre() {}
 

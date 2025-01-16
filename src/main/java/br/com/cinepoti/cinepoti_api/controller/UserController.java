@@ -39,6 +39,13 @@ public class UserController {
         return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);
     }
 
+    @PostMapping("/preferencias/{id}")
+    public ResponseEntity<Object> addUserPreferences(@PathVariable("id") Long id, @RequestBody List<Long> genreIds){
+        this.userService.saveUserGenrePreferences(id, genreIds);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
     // Endpoint para listar todos os usuários
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
