@@ -96,23 +96,9 @@ public class BookingService {
     // Instancia atual do objeto Booking
     Booking updatedBooking = bookingRepository.findById(id).orElseThrow();
 
-    // Novo Map de tickets do booking
-    // Se os tickets do novo booking tem mesmo ID do antigo, consideramos que não
-    // houveram alterações nos tickets
-    if (bookingDTO.tickets().keySet().equals(updatedBooking.getTickets().keySet())) {
-      Map<Long, Ticket> newTickets = new HashMap<>();
-
-      bookingDTO.tickets().values().stream().forEach((ticketDTO) -> {
-        Seat seat = seatService.getObjById(ticketDTO.seatId());
-        Ticket newTicket = TicketMapper.toEntity(ticketDTO, updatedBooking, seat);
-        newTickets.put(newTicket.getId(), newTicket);
-        ticketService.create(newTicket);
-      });
-      updatedBooking.setTickets(newTickets);
-    }
-
-    updatedBooking.setTotalAmount(calculateTotalPrice(updatedBooking));
+    updatedBooking.setExhibition(exhibitionService.getExhibitionObjById(id));
     updatedBooking.setBookingDate(bookingDTO.bookingDate());
+    bookingDTO.tickets().entrySet().stream().forEach(entry -> ticketService.update(entry.getKey(),entry.getValue()));
     bookingRepository.save(updatedBooking);
     return BookingMapper.toResponseDTO(updatedBooking);
   }

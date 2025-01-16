@@ -36,9 +36,10 @@ public class ExhibitionService {
   }
 
   public ExhibitionResponseDTO createExhibition(ExhibitionRequestDTO exhibitionRequest) {
-    Exhibition exhibition = ExhibitionMapper.toEntity(exhibitionRequest, null, null);
+    Movie movie = movieRepository.findById(exhibitionRequest.movieId()).orElseThrow();
+    CinemaRoom cinemaRoom = cinemaRoomRepository.findById(exhibitionRequest.cinemaRoomId()).orElseThrow();
+    Exhibition exhibition = ExhibitionMapper.toEntity(exhibitionRequest, movie, cinemaRoom);
     exhibition = this.exhibitionRepository.save(exhibition);
-
     return ExhibitionMapper.toResponseDTO(exhibition);
   }
 
@@ -54,6 +55,10 @@ public class ExhibitionService {
     return this.exhibitionRepository.findById(id)
         .map(ExhibitionMapper::toResponseDTO)
         .orElse(null);
+  }
+
+  public Exhibition getExhibitionObjById(Long id) {
+    return exhibitionRepository.findById(id).orElseThrow();
   }
 
   public List<SeatResponseDTO> getExhibitionAvailableSeats(Long exhibitionId) {

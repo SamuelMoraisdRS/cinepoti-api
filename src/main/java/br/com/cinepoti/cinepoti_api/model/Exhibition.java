@@ -28,7 +28,7 @@ public class Exhibition implements Serializable {
 
     // Adicionado para simplificar a consulta. Reduz Joins na tabela Booking, facilitando busca por assentos livres
     @OneToMany(mappedBy = "exhibition", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BookTicket> tickets;
+    private List<Ticket> tickets;
 
     @OneToMany(mappedBy = "exhibition", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Booking> bookings;

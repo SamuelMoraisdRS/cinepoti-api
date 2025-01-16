@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import br.com.cinepoti.cinepoti_api.dto.request.TicketRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.TicketResponseDTO;
 import br.com.cinepoti.cinepoti_api.mapper.TicketMapper;
 import br.com.cinepoti.cinepoti_api.model.Seat;
@@ -30,6 +31,13 @@ public class TicketService {
   }
 
   public TicketResponseDTO create(Ticket ticket) {
+    ticketRepository.save(ticket);
+    return TicketMapper.toResponseDTO(ticket);
+  }
+
+  public TicketResponseDTO update(Long id, TicketRequestDTO ticketDTO) {
+    Ticket ticket = getTicketObjById(id);
+    ticket.setSeat(seatService.getObjById(id));
     ticketRepository.save(ticket);
     return TicketMapper.toResponseDTO(ticket);
   }

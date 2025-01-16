@@ -25,7 +25,7 @@ public class ExhibitionController {
     this.exhibitionService = exhibitionService;
   }
 
-  @PreAuthorize("hasAuthority('ADMIN')")
+  @PreAuthorize("hasAuthority('COMMON')")
   @PostMapping
   public ResponseEntity<ExhibitionResponseDTO> createExhibition(@Valid @RequestBody ExhibitionRequestDTO exhibitionRequestDTO) {
     ExhibitionResponseDTO exhibitionResponseDTO = this.exhibitionService.createExhibition(exhibitionRequestDTO);
@@ -54,7 +54,7 @@ public class ExhibitionController {
     if (exhibition == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    
+
     return new ResponseEntity<>(exhibition, HttpStatus.OK);
   }
 

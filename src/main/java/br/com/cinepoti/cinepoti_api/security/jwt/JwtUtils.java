@@ -48,6 +48,7 @@ public class JwtUtils {
                 .signWith(getSignedKey(), SignatureAlgorithm.HS512) // Signing the token with HMAC SHA-512
                 .compact(); // Compacting the JWT token into a string
         logger.debug("Token generated successfully: {}", token);
+        token = token.replaceAll(" ", "");
         return token;
     }
 

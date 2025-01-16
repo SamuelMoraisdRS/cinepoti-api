@@ -3,6 +3,7 @@ package br.com.cinepoti.cinepoti_api.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
-@RequestMapping("booking/")
+@RequestMapping("compras/")
 public class BookingController {
 
   private final BookingService bookingService;
@@ -37,25 +38,26 @@ public class BookingController {
     this.ticketService = ticketService;
   }
 
-  @PostMapping("create/")
+  @PreAuthorize("hasAuthority('COMMON')")
+  @PostMapping("")
   public ResponseEntity<BookingResponseDTO> createBooking(@Valid @RequestBody BookingRequestDTO bookingDTO,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
     BookingResponseDTO response = bookingService.create(bookingDTO, userDetails.getId());
     return ResponseEntity.ok().body(response);
   }
 
-  @GetMapping("all/")
+  @GetMapping("")
   public ResponseEntity<List<BookingResponseDTO>> getUsersBookings(
       @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
     return ResponseEntity.ok().body(bookingService.getAllUsersBookings(userDetailsImpl.getId()));
   }
 
-  @GetMapping("{id}/ticket/")
+  @GetMapping("{id}/ingressos/")
   public ResponseEntity<List<TicketResponseDTO>> getAllTicketsByBooking(@PathVariable("id") Long bookingId) {
     return ResponseEntity.ok().body(ticketService.getAllTicketsByBooking(bookingId));
   }
 
-  @GetMapping("/ticket/{ticketId}")
+  @GetMapping("/ingressos/{ticketId}")
   public ResponseEntity<TicketResponseDTO> getTicket(@PathVariable("ticketId") Long ticketId) {
     return ResponseEntity.ok().body(ticketService.getTicketById(ticketId));
   }
@@ -65,25 +67,25 @@ public class BookingController {
     return ResponseEntity.ok().body(bookingService.getBookingById(bookingId));
   }
 
-  @GetMapping("{id}/payment")
+  @GetMapping("{id}/pagamento")
   public ResponseEntity<PaymentResponseDTO> getBookingPayment(@PathVariable Long bookingId) {
       return ResponseEntity.ok().body(bookingService.getBookingPayment(bookingId));
   }
 
-  @PutMapping("{bookingId}/pay")
+  @PutMapping("{bookingId}/pagar")
 public ResponseEntity<BookingResponseDTO> payBooking(@PathVariable("bookingId") Long id, @RequestBody PaymentRequestDTO payment) {
     return ResponseEntity.ok().body(bookingService.pay(id, payment));
 
   }
 
-  @PutMapping("edit/{id}")
+  @PutMapping("editar/{id}")
   public ResponseEntity<BookingResponseDTO> updateBooking(@PathVariable("id") Long id,
       @Valid @RequestBody BookingRequestDTO bookingRequestDTO) {
     return ResponseEntity.ok().body(bookingService.updateBooking(id, bookingRequestDTO));
   }
 
   // ? - É necessário fazer alguma verificação de segurança a mais?
-  @PutMapping("cancel/{id}")
+  @PutMapping("cancelar/{id}")
   public ResponseEntity<BookingResponseDTO> cancelBooking(@PathVariable("id") Long id) {
     return ResponseEntity.ok().body(bookingService.cancelBooking(id));
   }
@@ -93,7 +95,7 @@ public ResponseEntity<BookingResponseDTO> payBooking(@PathVariable("bookingId") 
    * isolados dos seus Bookings), por isso acho válido delegar o gerenciamento dos tickets totalmente aos
    * Bookings. Se acharem ruim, posso mudar a abordagem.
    */
-  @PutMapping("cancel/ticket/")
+  @PutMapping("cancelar/ingresso/")
   public void cancelTicket( @Valid @RequestBody List<Long> ticketIds) {
     for (Long ticketId : ticketIds) {
       bookingService.cancelTicket(ticketId);
