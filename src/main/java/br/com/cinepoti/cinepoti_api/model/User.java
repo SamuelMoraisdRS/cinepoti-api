@@ -1,21 +1,14 @@
 package br.com.cinepoti.cinepoti_api.model;
 
-import br.com.cinepoti.cinepoti_api.enums.Gender;
 import br.com.cinepoti.cinepoti_api.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -56,7 +49,8 @@ public class User implements Serializable {
     @JoinColumn(name = "id_profile")
     private Profile profile;
 
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserGenrePreference> genrePreferences;
 
     public User() {}
 

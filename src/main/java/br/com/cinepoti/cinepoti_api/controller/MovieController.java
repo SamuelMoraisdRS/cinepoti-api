@@ -38,6 +38,15 @@ public class MovieController {
     return new ResponseEntity<>(movies, HttpStatus.OK);
   }
 
+  @GetMapping("/sugestoes/{userId}")
+  public ResponseEntity<List<MovieResponseDTO>> getMovieSuggestionsByUserId(@PathVariable("userId") Long userId) {
+    List<MovieResponseDTO> movie = this.movieService.getMovieSuggestionsByUserId(userId);
+    if (movie != null) {
+      return new ResponseEntity<>(movie, HttpStatus.OK);
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  }
+
   @GetMapping("/{id}")
   public ResponseEntity<MovieResponseDTO> getMovieById(@PathVariable("id") Long id) {
     MovieResponseDTO movie = this.movieService.getMovieById(id);
