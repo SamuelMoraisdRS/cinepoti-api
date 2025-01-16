@@ -1,9 +1,7 @@
 package br.com.cinepoti.cinepoti_api.model;
 
 
-import br.com.cinepoti.cinepoti_api.model.CinemaRoom;
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.util.Objects;
 
@@ -16,10 +14,10 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "seat_row", nullable = false)
     private String row;
 
-    @Column(nullable = false)
+    @Column(name = "seat_number", nullable = false)
     private String number;
 
     @ManyToOne

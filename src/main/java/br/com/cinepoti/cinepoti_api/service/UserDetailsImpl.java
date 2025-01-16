@@ -52,6 +52,10 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
+    public Long getId() {
+      return id;
+    }
+
     @Override
     public String getPassword() {
         return password;
@@ -80,10 +84,6 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public void setId(Long id) {

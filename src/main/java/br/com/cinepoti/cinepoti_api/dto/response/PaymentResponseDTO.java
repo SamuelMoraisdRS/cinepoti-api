@@ -1,6 +1,5 @@
 package br.com.cinepoti.cinepoti_api.dto.response;
 
-import br.com.cinepoti.cinepoti_api.model.Booking;
 
 import java.time.LocalDate;
 
@@ -9,6 +8,6 @@ public record PaymentResponseDTO(
         Double amount,
         String paymentMethod,
         String paymentStatus,
-        Booking booking,
+        Long bookingId,
         LocalDate paymentDate
 ) {}

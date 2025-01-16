@@ -2,11 +2,12 @@ package br.com.cinepoti.cinepoti_api.model;
 
 
 import jakarta.persistence.*;
+
 import java.util.Objects;
 
 @Entity
 @Table(name = "CP_BOOK_TICKET")
-public class BookTicket {
+public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,28 +18,20 @@ public class BookTicket {
     private Booking booking;
 
     @ManyToOne
+    @JoinColumn(name = "exhibition_id")
+    private Exhibition exhibition;
+
+    @OneToOne
     @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
 
-    @ManyToOne
-    @JoinColumn(name = "exhibition_id", nullable = false)
-    private Exhibition exhibition;
-
-    public BookTicket() {
+    public Ticket() {
     }
 
-    public BookTicket(Long id, Seat seat, Booking booking, Exhibition exhibition) {
+    public Ticket(Long id, Seat seat, Booking booking) {
         this.id = id;
         this.seat = seat;
         this.booking = booking;
-        this.exhibition = exhibition;
-    }
-
-    public BookTicket(Long id, Long seatId, Long bookingId, Long exhibitionId) {
-        this.id = id;
-        this.seat = new Seat(seatId);
-        this.booking = new Booking(bookingId);
-        this.exhibition = new Exhibition(exhibitionId);
     }
 
     public Long getId() {
@@ -69,7 +62,7 @@ public class BookTicket {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BookTicket that = (BookTicket) o;
+        Ticket that = (Ticket) o;
         return Objects.equals(id, that.id);
     }
 

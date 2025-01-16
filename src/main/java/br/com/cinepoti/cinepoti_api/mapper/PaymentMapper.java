@@ -10,17 +10,21 @@ import br.com.cinepoti.cinepoti_api.util.Converter;
 
 public class PaymentMapper {
 
-    public static Payment toEntity(PaymentRequestDTO paymentRequestDTO, Booking booking) {
+    // Temos que receber o amount como argumento pois quem calcula o valor será a entidade Booking
+    public static Payment toEntity(PaymentRequestDTO paymentRequestDTO, Booking booking, Double amount) {
         if (paymentRequestDTO == null || booking == null) {
             return null;
         }
 
+        PaymentStatus paymentStatus = paymentRequestDTO.paymentStatus() == null ? PaymentStatus.PENDING :
+            Converter.stringToEnum(PaymentStatus.class, paymentRequestDTO.paymentStatus());
+
         return new Payment(
                 null, // ID is auto-generated
                 booking,
-                Converter.stringToEnum(PaymentStatus.class, paymentRequestDTO.paymentStatus()),
+                paymentStatus,
                 Converter.stringToEnum(PaymentMethod.class, paymentRequestDTO.paymentMethod()),
-                paymentRequestDTO.amount(),
+                amount,
                 paymentRequestDTO.paymentDate()
         );
     }
@@ -38,7 +42,7 @@ public class PaymentMapper {
                 payment.getAmount(),
                 payment.getPaymentMethod().toString(),
                 payment.getPaymentStatus().toString(),
-                payment.getBooking(),
+                payment.getBooking().getId(),
                 payment.getPaymentDate()
                 );
     }
