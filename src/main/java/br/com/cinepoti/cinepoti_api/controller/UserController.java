@@ -5,7 +5,6 @@ import br.com.cinepoti.cinepoti_api.dto.response.UserResponseDTO;
 import br.com.cinepoti.cinepoti_api.service.UserDetailsImpl;
 import br.com.cinepoti.cinepoti_api.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,11 +19,8 @@ import java.util.List;
 @CrossOrigin
 
 public class UserController {
-
-
     private final UserService userService;
 
-    @Autowired
     public  UserController(UserService userService){
         this.userService = userService;
     }

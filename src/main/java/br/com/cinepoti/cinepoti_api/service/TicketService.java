@@ -58,5 +58,4 @@ public class TicketService {
   public TicketResponseDTO getTicket(Long ticketId) {
     return TicketMapper.toResponseDTO(ticketRepository.findById(ticketId).orElseThrow());
   }
-
 }

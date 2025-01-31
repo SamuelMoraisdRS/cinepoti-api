@@ -26,7 +26,6 @@ public class UserService {
     private final GenreRepository genreRepository;
     private final UserGenrePreferenceRepository userGenrePreferenceRepository;
 
-    @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
             ProfileRepository profileRepository, GenreRepository genreRepository,
             UserGenrePreferenceRepository userGenrePreferenceRepository) {

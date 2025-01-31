@@ -7,7 +7,6 @@ import br.com.cinepoti.cinepoti_api.model.Address;
 import br.com.cinepoti.cinepoti_api.model.CinemaRoom;
 import br.com.cinepoti.cinepoti_api.repository.CinemaRoomRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 public class CinemaRoomService {
   private final CinemaRoomRepository cinemaRoomRepository;
 
-  @Autowired
   public CinemaRoomService(CinemaRoomRepository cinemaRoomRepository) {
     this.cinemaRoomRepository = cinemaRoomRepository;
   }

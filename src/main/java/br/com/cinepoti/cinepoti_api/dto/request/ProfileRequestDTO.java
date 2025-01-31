@@ -1,8 +1,6 @@
 package br.com.cinepoti.cinepoti_api.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;

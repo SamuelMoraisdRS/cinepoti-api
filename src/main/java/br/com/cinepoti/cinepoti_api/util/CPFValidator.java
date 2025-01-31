@@ -1,7 +1,5 @@
 package br.com.cinepoti.cinepoti_api.util;
 
-import java.util.InputMismatchException;
-
 public class CPFValidator {
 
     // Metodo principal para validar CPF

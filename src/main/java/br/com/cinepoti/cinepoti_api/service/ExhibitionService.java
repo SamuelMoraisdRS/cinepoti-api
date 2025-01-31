@@ -26,7 +26,6 @@ public class ExhibitionService {
   private final CinemaRoomRepository cinemaRoomRepository;
   private final SeatRepository seatRepository;
 
-  @Autowired
   public ExhibitionService(ExhibitionRepository exhibitionRepository, MovieRepository movieRepository,
       CinemaRoomRepository cinemaRoomRepository, SeatRepository seatRepository) {
     this.exhibitionRepository = exhibitionRepository;

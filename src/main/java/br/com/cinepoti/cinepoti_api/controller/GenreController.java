@@ -1,16 +1,11 @@
 package br.com.cinepoti.cinepoti_api.controller;
 
 
-import br.com.cinepoti.cinepoti_api.dto.request.CinemaRoomRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.request.GenreRequestDTO;
-import br.com.cinepoti.cinepoti_api.dto.request.UserRequestDTO;
-import br.com.cinepoti.cinepoti_api.dto.response.CinemaRoomResponseDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.GenreResponseDTO;
-import br.com.cinepoti.cinepoti_api.dto.response.UserResponseDTO;
 import br.com.cinepoti.cinepoti_api.model.Genre;
 import br.com.cinepoti.cinepoti_api.service.GenreService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,12 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/generos") 
+@RequestMapping("/generos")
 @CrossOrigin
 public class GenreController {
     private final GenreService genreService;
 
-    @Autowired
     public  GenreController(GenreService genreService){
         this.genreService = genreService;
     }

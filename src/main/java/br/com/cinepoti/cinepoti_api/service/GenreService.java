@@ -6,7 +6,6 @@ import br.com.cinepoti.cinepoti_api.mapper.GenreMapper;
 import br.com.cinepoti.cinepoti_api.model.Genre;
 import br.com.cinepoti.cinepoti_api.repository.GenreRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 public class GenreService {
     private final GenreRepository genreRepository;
 
-    @Autowired
     public GenreService(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
     }

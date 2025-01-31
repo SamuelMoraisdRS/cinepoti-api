@@ -22,7 +22,6 @@ import br.com.cinepoti.cinepoti_api.service.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -75,7 +74,6 @@ public class BookingController {
   @PutMapping("{bookingId}/pagar")
 public ResponseEntity<BookingResponseDTO> payBooking(@PathVariable("bookingId") Long id, @RequestBody PaymentRequestDTO payment) {
     return ResponseEntity.ok().body(bookingService.pay(id, payment));
-
   }
 
   @PutMapping("editar/{id}")

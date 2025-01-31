@@ -1,14 +1,8 @@
 package br.com.cinepoti.cinepoti_api.dto.request;
 
-import br.com.cinepoti.cinepoti_api.enums.Gender;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.br.CPF;
-
-import java.time.LocalDate;
 
 public record UserRequestDTO(
 

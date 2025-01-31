@@ -3,7 +3,6 @@ package br.com.cinepoti.cinepoti_api.service;
 import br.com.cinepoti.cinepoti_api.dto.request.AuthenticationRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.AccessResponseDTO;
 import br.com.cinepoti.cinepoti_api.security.jwt.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +18,6 @@ public class AuthService {
 
     private final JwtUtils jwtUtils;
 
-    @Autowired
     public AuthService(AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;

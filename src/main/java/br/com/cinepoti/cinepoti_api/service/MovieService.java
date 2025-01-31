@@ -22,15 +22,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class MovieService {
   private final MovieRepository movieRepository;
-  private final ExhibitionRepository exhibitionRepository;
   private final UserGenrePreferenceRepository userGenrePreferenceRepository;
   private final GenreRepository genreRepository; // Adicionado para buscar os gêneros
 
-  @Autowired
-  public MovieService(MovieRepository movieRepository, ExhibitionRepository exhibitionRepository,
+  public MovieService(MovieRepository movieRepository,
       UserGenrePreferenceRepository userGenrePreferenceRepository, GenreRepository genreRepository) {
     this.movieRepository = movieRepository;
-    this.exhibitionRepository = exhibitionRepository;
     this.userGenrePreferenceRepository = userGenrePreferenceRepository;
     this.genreRepository = genreRepository;
   }
@@ -44,23 +41,22 @@ public class MovieService {
 
     return MovieMapper.toResponseDTO(movie, genres); // Passa também os gêneros para o DTO
   }
+
   public List<MovieResponseDTO> getAllMovies() {
     // Busca todos os filmes
     List<Movie> movies = this.movieRepository.findAll();
 
     // Mapeia cada filme para MovieResponseDTO, incluindo os gêneros
     return movies.stream()
-            .map(movie -> MovieMapper.toResponseDTO(movie, movie.getGenres())) // Passa os gêneros
-            .collect(Collectors.toList());
+        .map(movie -> MovieMapper.toResponseDTO(movie, movie.getGenres())) // Passa os gêneros
+        .collect(Collectors.toList());
   }
-
 
   public MovieResponseDTO getMovieById(Long id) {
     return this.movieRepository.findById(id)
-            .map(movie -> MovieMapper.toResponseDTO(movie, movie.getGenres())) // Passa os gêneros
-            .orElse(null);
+        .map(movie -> MovieMapper.toResponseDTO(movie, movie.getGenres())) // Passa os gêneros
+        .orElse(null);
   }
-
 
   public List<MovieResponseDTO> getMovieSuggestionsByUserId(Long userId) {
     List<Long> genreIds = this.userGenrePreferenceRepository.findByUserId(userId)
@@ -76,34 +72,33 @@ public class MovieService {
         .stream().distinct()
         .map(movie -> MovieMapper.toResponseDTO(movie, movie.getGenres()))
         .collect(Collectors.toList());
-        
+
     return movies;
   }
 
   public MovieResponseDTO updateMovie(Long id, MovieRequestDTO movieRequestDTO) {
     return this.movieRepository.findById(id)
-            .map(movie -> {
-              movie.setDuration(movieRequestDTO.duration());
-              movie.setRating(movieRequestDTO.rating());
-              movie.setReleaseDate(movieRequestDTO.releaseDate());
-              movie.setSynopsis(movieRequestDTO.synopsis());
-              movie.setTitle(movieRequestDTO.title());
+        .map(movie -> {
+          movie.setDuration(movieRequestDTO.duration());
+          movie.setRating(movieRequestDTO.rating());
+          movie.setReleaseDate(movieRequestDTO.releaseDate());
+          movie.setSynopsis(movieRequestDTO.synopsis());
+          movie.setTitle(movieRequestDTO.title());
 
-              // Atualiza os gêneros, caso necessário
-              if (movieRequestDTO.genres() != null) {
-                List<Genre> genres = genreRepository.findAllById(movieRequestDTO.genres());
-                movie.setGenres(genres); // Associa os novos gêneros
-              }
+          // Atualiza os gêneros, caso necessário
+          if (movieRequestDTO.genres() != null) {
+            List<Genre> genres = genreRepository.findAllById(movieRequestDTO.genres());
+            movie.setGenres(genres); // Associa os novos gêneros
+          }
 
-              // Salva o filme atualizado
-              Movie updatedMovie = this.movieRepository.save(movie);
+          // Salva o filme atualizado
+          Movie updatedMovie = this.movieRepository.save(movie);
 
-              // Mapeia para MovieResponseDTO incluindo os gêneros
-              return MovieMapper.toResponseDTO(updatedMovie, movie.getGenres()); // Passa os gêneros atualizados
-            })
-            .orElse(null);
+          // Mapeia para MovieResponseDTO incluindo os gêneros
+          return MovieMapper.toResponseDTO(updatedMovie, movie.getGenres()); // Passa os gêneros atualizados
+        })
+        .orElse(null);
   }
-
 
   // Deleta um usuário por ID
   public void deleteMovie(Long id) {

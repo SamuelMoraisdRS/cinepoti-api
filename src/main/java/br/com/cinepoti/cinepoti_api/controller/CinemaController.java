@@ -1,6 +1,5 @@
 package br.com.cinepoti.cinepoti_api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,12 +12,11 @@ import br.com.cinepoti.cinepoti_api.service.CinemaRoomService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cinemas") 
+@RequestMapping("/cinemas")
 @CrossOrigin
 public class CinemaController {
     private final CinemaRoomService cinemaRoomService;
 
-    @Autowired
     public  CinemaController(CinemaRoomService cinemaRoomService){
         this.cinemaRoomService = cinemaRoomService;
     }

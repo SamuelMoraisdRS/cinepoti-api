@@ -4,7 +4,6 @@ import br.com.cinepoti.cinepoti_api.dto.request.ProfileRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.ProfileResponseDTO;
 import br.com.cinepoti.cinepoti_api.service.ProfileService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ public class ProfileController {
 
     private final ProfileService profileService;
 
-    @Autowired
+
     public ProfileController(ProfileService profileService) {
         this.profileService = profileService;
     }

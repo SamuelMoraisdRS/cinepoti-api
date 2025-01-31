@@ -2,7 +2,6 @@ package br.com.cinepoti.cinepoti_api.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity

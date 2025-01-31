@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import br.com.cinepoti.cinepoti_api.dto.request.SeatRequestDTO;

@@ -1,11 +1,7 @@
 package br.com.cinepoti.cinepoti_api.model;
 
 import br.com.cinepoti.cinepoti_api.enums.Gender;
-import br.com.cinepoti.cinepoti_api.enums.UserType;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
