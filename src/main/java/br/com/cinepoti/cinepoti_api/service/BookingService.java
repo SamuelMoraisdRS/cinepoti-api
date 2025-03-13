@@ -3,7 +3,7 @@ package br.com.cinepoti.cinepoti_api.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +15,7 @@ import br.com.cinepoti.cinepoti_api.dto.response.BookingResponseDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.PaymentResponseDTO;
 import br.com.cinepoti.cinepoti_api.enums.BookingStatus;
 import br.com.cinepoti.cinepoti_api.enums.PaymentStatus;
+import br.com.cinepoti.cinepoti_api.exception.ResourceNotFoundException;
 import br.com.cinepoti.cinepoti_api.mapper.BookingMapper;
 import br.com.cinepoti.cinepoti_api.mapper.PaymentMapper;
 import br.com.cinepoti.cinepoti_api.mapper.TicketMapper;
@@ -24,10 +25,13 @@ import br.com.cinepoti.cinepoti_api.model.Payment;
 import br.com.cinepoti.cinepoti_api.model.Seat;
 import br.com.cinepoti.cinepoti_api.model.Ticket;
 import br.com.cinepoti.cinepoti_api.model.User;
+import br.com.cinepoti.cinepoti_api.repository.AddressRepository;
 import br.com.cinepoti.cinepoti_api.repository.BookingRepository;
 
 @Service
 public class BookingService {
+
+  private final AddressRepository addressRepository;
 
   private final BookingRepository bookingRepository;
   private final UserService userService;
@@ -44,6 +48,7 @@ public class BookingService {
     this.seatService = seatService;
     this.ticketService = ticketService;
     this.paymentService = paymentService;
+    this.addressRepository = addressRepository;
   }
 
   /*
