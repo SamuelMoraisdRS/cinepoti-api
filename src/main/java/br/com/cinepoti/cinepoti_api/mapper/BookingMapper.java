@@ -17,30 +17,36 @@ import br.com.cinepoti.cinepoti_api.dto.response.PaymentResponseDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.TicketResponseDTO;
 import br.com.cinepoti.cinepoti_api.enums.BookingStatus;
 import br.com.cinepoti.cinepoti_api.util.Converter;
+import br.com.cinepoti.cinepoti_api.util.MapTransformer;
 
 public class BookingMapper {
 
     /**
-     * Cria uma entidade referente ao BookingRequestDTO enviado, instanciando também os Tickets embutidos na requisição. Esse método é usado
-     * apenas na criação de novos registros de Bookings na database, para criar uma instância a partir de um registro já existente, consulte a camada
+     * Cria uma entidade referente ao BookingRequestDTO enviado, instanciando também
+     * os Tickets embutidos na requisição. Esse método é usado
+     * apenas na criação de novos registros de Bookings na database, para criar uma
+     * instância a partir de um registro já existente, consulte a camada
      * service.
+     *
      * @param bookingRequestDTO
      * @param user
      * @param exhibition
-     * @param ticketsSeats Map contendo as instancias dos Seats associados a cada Ticket, com seus IDs como respectivas chaves.
-     * @return  Nova instância de objeto Booking, já composto por seus respectivos Tickets
+     * @param ticketsSeats      Map contendo as instancias dos Seats associados a
+     *                          cada Ticket, com seus IDs como respectivas chaves.
+     * @return Nova instância de objeto Booking, já composto por seus respectivos
+     *         Tickets
      */
     public static Booking toEntity(
             BookingRequestDTO bookingRequestDTO,
             User user,
             Exhibition exhibition,
-            Map<Long,Seat> ticketsSeats) {
+            Map<Long, Seat> ticketsSeats) {
         if (bookingRequestDTO == null) {
             return null;
         }
 
-        BookingStatus bookingStatus = bookingRequestDTO.status() == null ? BookingStatus.PENDING :
-        Converter.stringToEnum(BookingStatus.class,bookingRequestDTO.status());
+        BookingStatus bookingStatus = bookingRequestDTO.status() == null ? BookingStatus.PENDING
+                : Converter.stringToEnum(BookingStatus.class, bookingRequestDTO.status());
 
         Booking bookingInstance = new Booking(
                 null, // ID will be automatically generated in the database
@@ -49,13 +55,10 @@ public class BookingMapper {
                 bookingStatus,
                 bookingRequestDTO.bookingDate());
 
-        Map<Long,Ticket> tickets = new HashMap<>();
-
-        for (Entry<Long, TicketRequestDTO> entry : bookingRequestDTO.tickets().entrySet()) {
-            Seat seat = ticketsSeats.get(entry.getValue().seatId());
-            Ticket ticketInstance = TicketMapper.toEntity(entry.getValue(), bookingInstance, seat);
-            tickets.put(entry.getKey(), ticketInstance);
-        }
+        Map<Long, Ticket> tickets = MapTransformer.transformMap(bookingRequestDTO.tickets(), value -> {
+            Seat seat = ticketsSeats.get(value.seatId());
+            return TicketMapper.toEntity(value, bookingInstance, seat);
+        });
 
         Double totalAmount = 0.;
         for (Ticket ticket : tickets.values()) {
@@ -75,9 +78,9 @@ public class BookingMapper {
             return null;
         }
 
-        Map<Long,TicketResponseDTO> ticketResponseDTOMap = new HashMap<>();
+        Map<Long, TicketResponseDTO> ticketResponseDTOMap = new HashMap<>();
 
-        for (Entry<Long,Ticket> entry : booking.getTickets().entrySet()) {
+        for (Entry<Long, Ticket> entry : booking.getTickets().entrySet()) {
             ticketResponseDTOMap.put(entry.getKey(), TicketMapper.toResponseDTO(entry.getValue()));
         }
 
@@ -91,7 +94,6 @@ public class BookingMapper {
                 ticketResponseDTOMap,
                 booking.getTotalAmount(),
                 paymentResponseDTO,
-                booking.getStatus()
-        );
+                booking.getStatus());
     }
 }

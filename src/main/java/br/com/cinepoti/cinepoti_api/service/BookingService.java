@@ -4,10 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
-
 import br.com.cinepoti.cinepoti_api.dto.request.BookingRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.request.PaymentRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.request.TicketRequestDTO;
@@ -18,20 +15,17 @@ import br.com.cinepoti.cinepoti_api.enums.PaymentStatus;
 import br.com.cinepoti.cinepoti_api.exception.ResourceNotFoundException;
 import br.com.cinepoti.cinepoti_api.mapper.BookingMapper;
 import br.com.cinepoti.cinepoti_api.mapper.PaymentMapper;
-import br.com.cinepoti.cinepoti_api.mapper.TicketMapper;
 import br.com.cinepoti.cinepoti_api.model.Booking;
 import br.com.cinepoti.cinepoti_api.model.Exhibition;
 import br.com.cinepoti.cinepoti_api.model.Payment;
 import br.com.cinepoti.cinepoti_api.model.Seat;
 import br.com.cinepoti.cinepoti_api.model.Ticket;
 import br.com.cinepoti.cinepoti_api.model.User;
-import br.com.cinepoti.cinepoti_api.repository.AddressRepository;
 import br.com.cinepoti.cinepoti_api.repository.BookingRepository;
+import br.com.cinepoti.cinepoti_api.util.MapTransformer;
 
 @Service
 public class BookingService {
-
-  private final AddressRepository addressRepository;
 
   private final BookingRepository bookingRepository;
   private final UserService userService;
@@ -49,7 +43,6 @@ public class BookingService {
     this.seatService = seatService;
     this.ticketService = ticketService;
     this.paymentService = paymentService;
-    this.addressRepository = addressRepository;
   }
 
   /*
@@ -65,13 +58,8 @@ public class BookingService {
     Exhibition exhibition = exhibitionService.getExhibitionObjById(bookingDTO.exhibitionId());
 
     // Recuperar as instancias de Seats. Supondo que já existem no banco de dados
-    Map<Long, Seat> ticketsSeats = new HashMap<>();
-
-    // Map de Seats necessários para instanciar os novos tickets
-    for (TicketRequestDTO ticketRequestDTO : bookingDTO.tickets().values()) {
-      Seat seat = seatService.getObjById(ticketRequestDTO.seatId());
-      ticketsSeats.put(seat.getId(), seat);
-    }
+    Map<Long, Seat> ticketsSeats = MapTransformer.transformMap(bookingDTO.tickets(),
+        value -> seatService.getObjById(value.seatId()));
 
     Booking booking = BookingMapper.toEntity(bookingDTO, user, exhibition, ticketsSeats);
 
