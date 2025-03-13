@@ -41,7 +41,8 @@ public class BookingService {
   private final PaymentService paymentService;
 
   public BookingService(BookingRepository bookingRepository, UserService userService,
-      ExhibitionService exhibitionService, SeatService seatService, TicketService ticketService, PaymentService paymentService) {
+      ExhibitionService exhibitionService, SeatService seatService, TicketService ticketService,
+      PaymentService paymentService) {
     this.bookingRepository = bookingRepository;
     this.userService = userService;
     this.exhibitionService = exhibitionService;
@@ -67,8 +68,8 @@ public class BookingService {
     Map<Long, Seat> ticketsSeats = new HashMap<>();
 
     // Map de Seats necessários para instanciar os novos tickets
-    for (Entry<Long, TicketRequestDTO> entry : bookingDTO.tickets().entrySet()) {
-      Seat seat = seatService.getObjById(entry.getValue().seatId());
+    for (TicketRequestDTO ticketRequestDTO : bookingDTO.tickets().values()) {
+      Seat seat = seatService.getObjById(ticketRequestDTO.seatId());
       ticketsSeats.put(seat.getId(), seat);
     }
 
@@ -85,8 +86,9 @@ public class BookingService {
   }
 
   public List<BookingResponseDTO> getAllUsersBookings(Long userId) {
-    return bookingRepository.findAllByUserId(userId).get().stream()
-        .map((booking) -> BookingMapper.toResponseDTO(booking)).toList();
+    List<Booking> bookings = bookingRepository.findAllByUserId(userId)
+        .orElseThrow(() -> new ResourceNotFoundException("Bookings not found for user: " + userId));
+    return bookings.stream().map(BookingMapper::toResponseDTO).toList();
   }
 
   public BookingResponseDTO getBookingById(Long bookingId) {
@@ -103,12 +105,11 @@ public class BookingService {
 
     updatedBooking.setExhibition(exhibitionService.getExhibitionObjById(id));
     updatedBooking.setBookingDate(bookingDTO.bookingDate());
-    bookingDTO.tickets().entrySet().stream().forEach(entry -> ticketService.update(entry.getKey(),entry.getValue()));
+    bookingDTO.tickets().entrySet().stream().forEach(entry -> ticketService.update(entry.getKey(), entry.getValue()));
     bookingRepository.save(updatedBooking);
     return BookingMapper.toResponseDTO(updatedBooking);
   }
 
-  @PutMapping
   public BookingResponseDTO cancelBooking(Long id) {
     Booking booking = bookingRepository.findById(id).orElseThrow();
     booking.setStatus(BookingStatus.CANCELLED);
