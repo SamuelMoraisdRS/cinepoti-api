@@ -1,13 +1,11 @@
 package br.com.cinepoti.cinepoti_api.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import br.com.cinepoti.cinepoti_api.dto.request.BookingRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.request.PaymentRequestDTO;
-import br.com.cinepoti.cinepoti_api.dto.request.TicketRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.BookingResponseDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.PaymentResponseDTO;
 import br.com.cinepoti.cinepoti_api.enums.BookingStatus;
@@ -83,7 +81,7 @@ public class BookingService {
     return BookingMapper.toResponseDTO(bookingRepository.findById(bookingId).orElseThrow());
   }
 
-  public Booking getBookingObjById(Long bookingId) {
+  protected Booking getBookingObjById(Long bookingId) {
     return bookingRepository.findById(bookingId).orElseThrow();
   }
 
@@ -103,6 +101,12 @@ public class BookingService {
     booking.setStatus(BookingStatus.CANCELLED);
     bookingRepository.save(booking);
     return BookingMapper.toResponseDTO(booking);
+  }
+
+  protected void cancelBookings(List<Long> ids) {
+    for (Long id : ids) {
+      cancelBooking(id);
+    }
   }
 
   public BookingResponseDTO cancelTicket(Long ticketId) {

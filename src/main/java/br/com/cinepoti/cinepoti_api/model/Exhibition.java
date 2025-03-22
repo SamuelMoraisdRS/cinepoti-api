@@ -54,6 +54,10 @@ public class Exhibition implements Serializable {
         this.movie = new Movie(movieId);
     }
 
+    public boolean hasTickets() {
+        return !tickets.isEmpty();
+    }
+
     public Long getId() {
         return id;
     }
@@ -84,6 +88,10 @@ public class Exhibition implements Serializable {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+    }
+
+    public List<Long> getAssociatedBookings() {
+        return bookings.stream().map(Booking::getId).toList();
     }
 
     @Override

@@ -1,9 +1,7 @@
 package br.com.cinepoti.cinepoti_api.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.cinepoti.cinepoti_api.dto.request.ExhibitionRequestDTO;
 import br.com.cinepoti.cinepoti_api.dto.response.ExhibitionResponseDTO;
@@ -25,13 +23,15 @@ public class ExhibitionService {
   private final MovieRepository movieRepository;
   private final CinemaRoomRepository cinemaRoomRepository;
   private final SeatRepository seatRepository;
+  private final BookingService bookingService;
 
   public ExhibitionService(ExhibitionRepository exhibitionRepository, MovieRepository movieRepository,
-      CinemaRoomRepository cinemaRoomRepository, SeatRepository seatRepository) {
+      CinemaRoomRepository cinemaRoomRepository, SeatRepository seatRepository, BookingService bookingService) {
     this.exhibitionRepository = exhibitionRepository;
     this.movieRepository = movieRepository;
     this.cinemaRoomRepository = cinemaRoomRepository;
     this.seatRepository = seatRepository;
+    this.bookingService = bookingService;
   }
 
   public ExhibitionResponseDTO createExhibition(ExhibitionRequestDTO exhibitionRequest) {
@@ -47,7 +47,7 @@ public class ExhibitionService {
 
     return exhibitions.stream()
         .map(ExhibitionMapper::toResponseDTO)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   public ExhibitionResponseDTO getExhibitionById(Long id) {
@@ -56,7 +56,7 @@ public class ExhibitionService {
         .orElse(null);
   }
 
-  public Exhibition getExhibitionObjById(Long id) {
+  protected Exhibition getExhibitionObjById(Long id) {
     return exhibitionRepository.findById(id).orElseThrow();
   }
 
@@ -70,13 +70,14 @@ public class ExhibitionService {
     return seatRepository.findAvailableSeats(exhibition.getCinemaRoom().getId(), exhibitionId)
         .stream()
         .map(SeatMapper::toResponseDTO)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   public ExhibitionResponseDTO updateExhibition(Long id, ExhibitionRequestDTO exhibitionRequestDTO) {
     return this.exhibitionRepository.findById(id)
         .map(exhibition -> {
-          Long movieId = exhibitionRequestDTO.movieId(), cinemaRoomId = exhibitionRequestDTO.cinemaRoomId();
+          Long movieId = exhibitionRequestDTO.movieId();
+          Long cinemaRoomId = exhibitionRequestDTO.cinemaRoomId();
 
           if (movieId != null && movieId > 0 && this.movieRepository.existsById(movieId))
             exhibition.setMovie(new Movie(movieId));
@@ -92,10 +93,17 @@ public class ExhibitionService {
 
   // Deleta um usuário por ID
   public void deleteExhibition(Long id) {
-    // TODO: Verificar se existe algum ingresso comprado
+    // TODO: Verificar se existe algum ingresso comprado para exibição
     if (!this.exhibitionRepository.existsById(id)) {
       throw new RuntimeException("Exhibition not found with id: " + id);
     }
+
+    Exhibition exhibition = this.exhibitionRepository.getReferenceById(id);
+
+    if (exhibition.hasTickets()) {
+      bookingService.cancelBookings(exhibition.getAssociatedBookings());
+    }
+
     this.exhibitionRepository.deleteById(id);
   }
 }
